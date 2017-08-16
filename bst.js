@@ -65,6 +65,72 @@ BST.prototype.contains = function (val) {
   }
 };
 
+//remove node
+BST.prototype.removeNode = function (root, val) {
+  if(!this){ return null;}
+
+  var currentNode = root;
+  var tempStack = [];
+  while (currentNode){
+      tempStack.push(currentNode);
+    if ( val === currentNode.val ){
+      //pop twice to get the parent of the currentNode
+      tempStack.pop();
+      var parent = tempStack.pop();
+      //if sub-BST has no leafs
+      if(!currentNode.right && !currentNode.left){
+        if(parent.left){
+          parent.left = null;
+        }
+        else{
+          parent.right = null;
+        }
+      }
+      // if sub-BST has a left
+      else if(currentNode.left && !currentNode.right){
+        if(parent.left){
+          parent.left = currentNode.left;
+        }
+        else{
+          parent.right = currentNode.left;
+        }
+      }
+      // if sub-BST has a right
+      else if(currentNode.right && !currentNode.left){
+        if(parent.left){
+          parent.left = currentNode.right;
+        }
+        else{
+          parent.right = currentNode.right;
+        }
+      }
+      else{
+        //Node has 2 children
+        var deleteNode = current.right; //finds the min element in tree
+        while(deleteNode){
+          if(deleteNode.left){
+            deleteNode =  deleteNode.left;
+          }
+          else{
+            break;
+          }
+        }
+        //delete the bottom node
+        current = removeNode(current, deleteNode);
+        //replace the value of the node you wanted to delete with apprioate value 
+        current.val =  deleteNode.val;
+      }
+    }
+    else if (val < currentNode.val){
+      currentNode = currentNode.left;
+    }
+    else if(val > currentNode.val){
+      currentNode = currentNode.right;
+    }
+  }
+  return root;
+};
+
 //depth first-traversel
 //in-order, least to greatest
 //pre-order the order in which the nodes are touched
